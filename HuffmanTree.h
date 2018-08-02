@@ -38,7 +38,7 @@ public:
 
 	HuffmanTree(W* w, size_t n, W& invalid)
 	{
-		// ¹¹½¨¹þ¸¥ÂüÊ÷
+		// Â¹Â¹Â½Â¨Â¹Ã¾Â¸Â¥Ã‚Ã¼ÃŠÃ·
 		priority_queue<Node*, vector<Node*>, NodeCompare> minHead;
 		size_t i = 0;
 		for (i = 0; i < n; ++i){
@@ -56,7 +56,7 @@ public:
 			parent->_right = right;
 			minHead.push(parent);
 		}
-		_root = minHead.top();
+		//_root = minHead.top();
 	}
 
 	~HuffmanTree()
