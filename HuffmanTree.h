@@ -50,7 +50,7 @@ public:
 			Node* left = minHead.top();
 			minHead.pop();
 			Node* right = minHead.top();
-			minHead.pop();
+			minHead.pop()
 			Node* parent = new Node(left->_w + right->_w);
 			parent->_left = left;
 			parent->_right = right;
