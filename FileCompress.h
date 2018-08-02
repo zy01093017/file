@@ -12,15 +12,15 @@ using namespace std;
 typedef long long LongType;
 
 struct CharInfo{
-	char _ch;        //×Ö·û
-	string _code;    //±àÂë
-	LongType _count; //³öÏÖ´ÎÊı
+	char _ch;        //å­—ç¬¦
+	string _code;    //ç¼–ç 
+	LongType _count; //å‡ºç°æ¬¡æ•°
 
-	// ÖØÔØ+ ÊÇÎªÁËÔÚ¹¹½¨¹ş·òÂüÊ÷Ê±£¬parent = left+right
+	// é‡è½½+ æ˜¯ä¸ºäº†åœ¨æ„å»ºå“ˆå¤«æ›¼æ ‘æ—¶ï¼Œparent = left+right
 	CharInfo operator+(const CharInfo& info)
 	{
 		CharInfo ret;
-		ret._count = _count + info._count;
+		//ret._count = _count + info._count;
 		return ret;
 	}
 
@@ -54,27 +54,27 @@ public:
 	}
 	void Compress(const char* file)
 	{
-		// 1.Í³¼ÆÎÄ¼şÖĞ×Ö·û³öÏÖµÄ´ÎÊı
+		// 1.ç»Ÿè®¡æ–‡ä»¶ä¸­å­—ç¬¦å‡ºç°çš„æ¬¡æ•°
 		ifstream ifs(file, ios_base::in | ios_base::binary);
 		char ch;
 		while (ifs.get(ch)){
 			_hashInfos[(unsigned char)ch]._count++;
 		}
 
-		// 2.Éú³É¹ş¸¥ÂüÊ÷
+		// 2.ç”Ÿæˆå“ˆå¼—æ›¼æ ‘
 		CharInfo invalid;
 		invalid._count = 0;
 		HuffmanTree<CharInfo> tree(_hashInfos, 256, invalid);
 
-		// 3.Éú³É Huffman code
+		// 3.ç”Ÿæˆ Huffman code
 		generateHuffmanCode(tree.GetRoot());
 
-		// 4.Ñ¹Ëõ
+		// 4.å‹ç¼©
 		string compressFile = file;
 		compressFile += ".huffman";
 		ofstream ofs(compressFile.c_str(), ios_base::out | ios_base::binary);
 
-		// °Ñ×Ö·ûºÍ´ÎÊıÒ²Ğ´µ½Ñ¹ËõÎÄ¼şÖĞ£¬·½±ã½âÑ¹Ê±Éú³É _hashInfos
+		// æŠŠå­—ç¬¦å’Œæ¬¡æ•°ä¹Ÿå†™åˆ°å‹ç¼©æ–‡ä»¶ä¸­ï¼Œæ–¹ä¾¿è§£å‹æ—¶ç”Ÿæˆ _hashInfos
 		for (size_t i = 0; i < 256; ++i){
 			if (_hashInfos[i]._count > 0){
 				configInfo info;
@@ -87,12 +87,12 @@ public:
 		end._count = 0;
 		ofs.write((char*)&end, sizeof(configInfo));
 
-		ifs.clear();  //ÇåÀíÒ»ÏÂ£¬ÏÂÃæseekg²ÅÆğ×÷ÓÃ
+		ifs.clear();  //æ¸…ç†ä¸€ä¸‹ï¼Œä¸‹é¢seekgæ‰èµ·ä½œç”¨
 		ifs.seekg(0);
 		char value = 0;
 		int pos = 0;
 
-		//°Ñ±àÂëĞ´Èëµ½Ñ¹ËõÎÄ¼şÖĞ
+		//æŠŠç¼–ç å†™å…¥åˆ°å‹ç¼©æ–‡ä»¶ä¸­
 		while (ifs.get(ch)){
 			string& code = _hashInfos[(unsigned char)ch]._code;
 			for (size_t i = 0; i < code.size(); ++i){
@@ -108,7 +108,7 @@ public:
 				}
 			}
 		}
-		// Èç¹û×îºóÒ»¸ö×Ö½ÚÃ»ÌîÂú£¬Ö±½Ó·Å½øÈ¥
+		// å¦‚æœæœ€åä¸€ä¸ªå­—èŠ‚æ²¡å¡«æ»¡ï¼Œç›´æ¥æ”¾è¿›å»
 		if (pos > 0) ofs.put(value);
 	}
 
@@ -123,13 +123,13 @@ public:
 	        return;
 	    }
 
-	    // Íù×ó±ß×ß£¬°Ñ×óº¢×ÓµÄ code ¼ÓÉÏ'0'
+	    // å¾€å·¦è¾¹èµ°ï¼ŒæŠŠå·¦å­©å­çš„ code åŠ ä¸Š'0'
 	    if(root->_left){
 	        root->_left->_w._code = root->_w._code + '0';
 	        generateHuffmanCode(root->_left);
 	    }
 	
-	    // ÍùÓÒ±ß×ß£¬°ÑÓÒº¢×ÓµÄ code ¼ÓÉÏ'1'
+	    // å¾€å³è¾¹èµ°ï¼ŒæŠŠå³å­©å­çš„ code åŠ ä¸Š'1'
 	    if(root->_right){
 	        root->_right->_w._code = root->_w._code + '1';
 	        generateHuffmanCode(root->_right);
@@ -138,7 +138,7 @@ public:
 
 	void Uncompress(const char* file)
 	{
-		// 1. ´ò¿ªÑ¹ËõÎÄ¼ş£¬½øĞĞ½âÑ¹
+		// 1. æ‰“å¼€å‹ç¼©æ–‡ä»¶ï¼Œè¿›è¡Œè§£å‹
 		ifstream ifs(file, ios_base::in | ios_base::binary);
 		string uncompressfile = file;
 		size_t pos = uncompressfile.rfind('.');
@@ -148,7 +148,7 @@ public:
 		uncompressfile += ".unhuffman";
 		ofstream ofs(uncompressfile.c_str(), ios_base::out | ios_base::binary);
 		
-		// ÖØ¹¹ _hashInfos
+		// é‡æ„ _hashInfos
 		while (1){
 			configInfo info;
 			ifs.read((char*)&info, sizeof(configInfo));
@@ -162,15 +162,15 @@ public:
 			}
 		}
 
-		// 2. ÖØ½¨Huffman Tree
+		// 2. é‡å»ºHuffman Tree
 		CharInfo invalid;
 		invalid._count = 0;
 		HuffmanTree<CharInfo> tree(_hashInfos, 256, invalid);
 
-		// 3. ¸ù¾İ Huffman Code ½âÑ¹Ëõ
+		// 3. æ ¹æ® Huffman Code è§£å‹ç¼©
 		char ch;
 		Node* root = tree.GetRoot();
-		LongType fileCount = root->_w._count;  //¼ÇÂ¼ÁËÎÄ¼ş×Ü×Ö·ûµÄ¸öÊı£¬Îª½âÑ¹×ö×¼±¸
+		LongType fileCount = root->_w._count;  //è®°å½•äº†æ–‡ä»¶æ€»å­—ç¬¦çš„ä¸ªæ•°ï¼Œä¸ºè§£å‹åšå‡†å¤‡
 
 		Node* cur = root;
 		while (ifs.get(ch)){
@@ -183,7 +183,7 @@ public:
 					ofs.put(cur->_w._ch);
 					cur = root;
 
-					if (--fileCount == 0) break; // ½âÑ¹Íê³É
+					if (--fileCount == 0) break; // è§£å‹å®Œæˆ
 				}
 			}
 		}
